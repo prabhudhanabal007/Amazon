@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-container {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .search-bar {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .product {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eee;
+            border-radius: 8px;
+        }
+        .add-to-cart {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .add-to-cart:hover {
+            background-color: #218838;
+        }
+
+        .product-detail {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 500px;
+        }
+        .close-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background: red;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            z-index: 1000;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" class="search-bar" id="search" placeholder="Search for products..." oninput="autocompleteSearch()">
+            <button class="search-button" onclick="filterProducts()">Search</button>
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+        </div>
+        <div class="products" id="product-list">
+            <div class="product" data-name="Lenovo laptop core i3" data-price="35000" data-description="Lenovo IdeaPad Slim 3 13th Gen Core i3-1305U (8GB RAM/512GB SSD/Integrated Intel UHD Graphics/14 inch (35.5cm)/Windows 11/ MS Office 2021/Grey/1.3Kg), 82X6004GIN Thin & Light Laptop" data-image="images/laptop.png" onclick="showProductDetails(this)">
+                <img src="images/laptop.png" alt="Laptop">
+                <p>Lenovo laptop core i3</p>
+                <p>$35000</p>
+            </div>
+            <div class="product" data-name="Lenovo laptop core i5" data-price="45000" data-description="Lenovo IdeaPad Slim 3, Intel Core i5-12450H 12th Gen, 16GB RAM, 512GB SSD, FHD 250Nits, 14"/35.5cm, Windows 11, MSOffice 21, Grey, 1.37Kg, 83EQ005VIN,1Yr Warranty,Alexa Built-in,3 mon. GamePass Laptop" data-image="images/laptop.png" onclick="showProductDetails(this)">
+                <img src="images/laptop.png" alt="Laptop">
+                <p>Lenovo laptop core i5</p>
+                <p>$45000</p>
+            </div>
+            <div class="product" data-name="Lenovo laptop core i7" data-price="55000" data-description="Lenovo IdeaPad Pro 5, 12th Gen Intel Core i7-1255U, 16GB DDR4, 1TB SSD, (Win11, Office21, Silver,1.41 kg), IPS, Micro-edge, BrightView,14-inch (35.6cm) FHD Laptop, Intel Iris Xe graphics, HD camera" (39.62 cm) FHD (1920x1080) Antiglare 250 nits Thin and Light Laptop (16GB RAM/512GB SSD/Windows 11 Home/Iron Grey/1Y Onsite/1.7 kg)" data-image="images/laptop.png" onclick="showProductDetails(this)">
+                <img src="images/laptop.png" alt="Laptop">
+                <p>Lenovo laptop core i7</p>
+                <p>$55000</p>
+            </div>
+            <div class="product" data-name="Lenovo laptop core i9" data-price="70000" data-description="Lenovo IdeaPad Pro 5, Intel Core Ultra 9 185H, 32GB RAM, 1TB SSD, 2.8K-OLED 400Nits 120Hz, 14"/35.5cm, Windows 11, MS Office 21, Grey, 1.4Kg" data-image="images/laptop.png" onclick="showProductDetails(this)">
+                <img src="images/laptop.png" alt="Laptop">
+                <p>Lenovo laptop core i9</p>
+                <p>$70000</p>
+            </div>
+        </div>
+        <div class="cart">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-list"></ul>
+            <p><strong>Total: $<span id="total-price">0</span></strong></p>
+        </div>
+    </div>
+    <div class="product-detail" id="product-detail">
+        <h2 id="detail-name"></h2>
+<p id="detail-description"></p>
+        <img id="detail-image" src="" alt="Product Image" width="80%">
+
+        <b><p id="detail-price"></p></b>
+        <button class="add-to-cart" onclick="addToCartFromDetails()">Add to Cart</button>
+        <button class="close-btn" onclick="closeProductDetails()">Close</button>
+    </div>
+    <script>
+
+const productlist = ["Lenovo laptop core i3","Lenovo laptop core i5","Lenovo laptop core i7", "Lenovo laptop core i9"];
+
+        function autocompleteSearch() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let autocompleteList = document.getElementById('autocomplete-list');
+            autocompleteList.innerHTML = '';
+            if (!input) return;
+            
+            let matches = productlist.filter(product => product.toLowerCase().includes(input));
+            matches.forEach(match => {
+                let item = document.createElement('div');
+                item.textContent = match;
+                item.classList.add('autocomplete-item');
+                item.onclick = function () {
+                    document.getElementById('search').value = match;
+                    autocompleteList.innerHTML = '';
+                    filterProducts();
+                };
+                autocompleteList.appendChild(item);
+            });
+console.log(input);
+if(input == "")
+{
+filterProducts();
+}
+        }
+
+        function filterProducts() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let products = document.querySelectorAll('.product');
+            
+            products.forEach(product => {
+                let name = product.getAttribute('data-name').toLowerCase();
+                product.style.display = name.includes(input) ? 'block' : 'none';
+  		  document.getElementById('product-detail').style.display = 'none';
+            });
+        }
+        
+        let totalPrice = 0;
+        function addToCart(productName, price) {
+            let cartList = document.getElementById('cart-list');
+            let listItem = document.createElement('li');
+            listItem.textContent = `${productName} - $${price}`;
+            cartList.appendChild(listItem);
+            totalPrice += parseInt(price);
+            document.getElementById('total-price').textContent = totalPrice;
+        }
+        
+        function showProductDetails(element) {
+            document.getElementById('detail-name').textContent = element.getAttribute('data-name');
+            document.getElementById('detail-price').textContent = `$${element.getAttribute('data-price')}`;
+            document.getElementById('detail-image').src = element.getAttribute('data-image');
+      document.getElementById('detail-description').textContent = element.getAttribute('data-description');
+            document.getElementById('product-detail').style.display = 'block';
+        }
+        
+        function closeProductDetails() {
+            document.getElementById('product-detail').style.display = 'none';
+        }
+        
+        function addToCartFromDetails() {
+            let name = document.getElementById('detail-name').textContent;
+            let price = document.getElementById('detail-price').textContent.replace('$', '');
+            addToCart(name, price);
+        }
+    </script>
+</body>
+</html>
