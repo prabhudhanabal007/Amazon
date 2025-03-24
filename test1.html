@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .search-bar {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .product {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eee;
+            border-radius: 8px;
+        }
+        .add-to-cart {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .add-to-cart:hover {
+            background-color: #218838;
+        }
+
+        .product-detail {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 500px;
+        }
+        .close-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background: red;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" class="search-bar" id="search" placeholder="Search for products...">
+            <button class="search-button" onclick="filterProducts()">Search</button>
+        </div>
+        <div class="products" id="product-list">
+            <div class="product" data-name="Laptop" data-price="1000" data-image="images/laptop.png" onclick="showProductDetails(this)">
+                <img src="images/laptop.png" alt="Laptop">
+                <p>Laptop</p>
+                <p>$1000</p>
+            </div>
+            <div class="product" data-name="Phone" data-price="500" data-image="images/iphone.jpg" onclick="showProductDetails(this)">
+                <img src="images/iphone.jpg" alt="Phone">
+                <p>Phone</p>
+                <p>$500</p>
+            </div>
+            <div class="product" data-name="Headphones" data-price="150" data-image="images/headphone.png" onclick="showProductDetails(this)">
+                <img src="images/headphone.png" alt="Headphones">
+                <p>Headphones</p>
+                <p>$150</p>
+            </div>
+            <div class="product" data-name="Camera" data-price="700" data-image="images/Camera.png" onclick="showProductDetails(this)">
+                <img src="images/Camera.png" alt="Camera">
+                <p>Camera</p>
+                <p>$700</p>
+            </div>
+        </div>
+        <div class="cart">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-list"></ul>
+            <p><strong>Total: $<span id="total-price">0</span></strong></p>
+        </div>
+    </div>
+    <div class="product-detail" id="product-detail">
+        <h2 id="detail-name"></h2>
+        <img id="detail-image" src="" alt="Product Image" width="100%">
+        <p id="detail-price"></p>
+        <button class="add-to-cart" onclick="addToCartFromDetails()">Add to Cart</button>
+        <button class="close-btn" onclick="closeProductDetails()">Close</button>
+    </div>
+    <script>
+        function filterProducts() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let products = document.querySelectorAll('.product');
+            
+            products.forEach(product => {
+                let name = product.getAttribute('data-name').toLowerCase();
+                product.style.display = name.includes(input) ? 'block' : 'none';
+  		  document.getElementById('product-detail').style.display = 'none';
+            });
+        }
+        
+        let totalPrice = 0;
+        function addToCart(productName, price) {
+            let cartList = document.getElementById('cart-list');
+            let listItem = document.createElement('li');
+            listItem.textContent = `${productName} - $${price}`;
+            cartList.appendChild(listItem);
+            totalPrice += parseInt(price);
+            document.getElementById('total-price').textContent = totalPrice;
+        }
+        
+        function showProductDetails(element) {
+            document.getElementById('detail-name').textContent = element.getAttribute('data-name');
+            document.getElementById('detail-price').textContent = `$${element.getAttribute('data-price')}`;
+            document.getElementById('detail-image').src = element.getAttribute('data-image');
+            document.getElementById('product-detail').style.display = 'block';
+        }
+        
+        function closeProductDetails() {
+            document.getElementById('product-detail').style.display = 'none';
+        }
+        
+        function addToCartFromDetails() {
+            let name = document.getElementById('detail-name').textContent;
+            let price = document.getElementById('detail-price').textContent.replace('$', '');
+            addToCart(name, price);
+        }
+    </script>
+</body>
+</html>
